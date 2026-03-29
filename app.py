@@ -39,24 +39,24 @@ At minimum, your system should:
 
 st.divider()
 
-# --- Owner & Pet Setup --- # new code 2
-st.subheader("Owner & Pet Setup")  # new code 2
+# --- Owner & Pet Setup --- # new code 
+st.subheader("Owner & Pet Setup")  # new code 
 owner_name = st.text_input("Owner name", value="Jordan")
 pet_name = st.text_input("Pet name", value="Mochi")
 species = st.selectbox("Species", ["dog", "cat", "other"])
-available_minutes = st.number_input("Available minutes today", min_value=10, max_value=480, value=60)  # new code 2
+available_minutes = st.number_input("Available minutes today", min_value=10, max_value=480, value=60)  # new code 
 
-if st.button("Set up owner & pet"):  # new code 2
-    st.session_state.owner = Owner(name=owner_name, available_minutes=available_minutes)  # new code 2
-    st.session_state.pet = Pet(name=pet_name, species=species, age=1)  # new code 2
-    st.session_state.owner.add_pet(st.session_state.pet)  # new code 2: attach pet to owner
-    st.success(f"Owner '{owner_name}' and pet '{pet_name}' ({species}) set up.")  # new code 2
+if st.button("Set up owner & pet"):  # new code 
+    st.session_state.owner = Owner(name=owner_name, available_minutes=available_minutes)  # new code 
+    st.session_state.pet = Pet(name=pet_name, species=species, age=1)  # new code 
+    st.session_state.owner.add_pet(st.session_state.pet)  # new code : attach pet to owner
+    st.success(f"Owner '{owner_name}' and pet '{pet_name}' ({species}) set up.")  # new code 
 
 st.divider()
 
-# --- Task Management --- # new code 2
+# --- Task Management --- # new code 
 st.markdown("### Tasks")
-st.caption("Add tasks below. Each task is added directly to your pet using add_task().")  # new code 2
+st.caption("Add tasks below. Each task is added directly to your pet using add_task().")  # new code 
 
 if "tasks" not in st.session_state:
     st.session_state.tasks = []
@@ -69,18 +69,18 @@ with col2:
 with col3:
     priority = st.selectbox("Priority", ["low", "medium", "high"], index=2)
 
-if st.button("Add task"):  # new code 2
-    if "pet" not in st.session_state:  # new code 2: guard — pet must exist before adding tasks
-        st.warning("Please set up your owner & pet first.")  # new code 2
+if st.button("Add task"):  # new code 
+    if "pet" not in st.session_state:  # new code : guard — pet must exist before adding tasks
+        st.warning("Please set up your owner & pet first.")  # new code 
     else:
-        new_task = Task(  # new code 2: create a real Task object
+        new_task = Task(  # new code : create a real Task object
             name=task_title,
             category="general",
             duration_minutes=int(duration),
             priority=Priority[priority.upper()]
         )
-        st.session_state.pet.add_task(new_task)  # new code 2: call add_task() directly on Pet
-        st.session_state.tasks.append(  # new code 2: keep UI table in sync
+        st.session_state.pet.add_task(new_task)  # new code : call add_task() directly on Pet
+        st.session_state.tasks.append(  # new code : keep UI table in sync
             {"title": task_title, "duration_minutes": int(duration), "priority": priority}
         )
 
@@ -92,32 +92,32 @@ else:
 
 st.divider()
 
-# --- Schedule Generation --- # new code 2
+# --- Schedule Generation --- # new code 
 st.subheader("Build Schedule")
-st.caption("Generates a prioritized daily plan from your pet's tasks within your available time.")  # new code 2
+st.caption("Generates a prioritized daily plan from your pet's tasks within your available time.")  # new code 
 
 if st.button("Generate schedule"):  # new code
     if "owner" not in st.session_state:  # new code: only create Owner if not already in session
-        st.warning("Please set up your owner & pet before generating a schedule.")  # new code 2
+        st.warning("Please set up your owner & pet before generating a schedule.")  # new code 
     else:
         scheduler = Scheduler(owner=st.session_state.owner)  # new code
 
-        # --- phase 6 step 1: Conflict Warnings ---
+        # ---  Conflict Warnings ---
         st.markdown("#### Conflict Warnings")
-        conflicts = scheduler.safe_detect_conflicts()  # phase 6 step 1: run safe conflict check
+        conflicts = scheduler.safe_detect_conflicts()  # new code: run safe conflict check
         for msg in conflicts:
             if "No conflicts" in msg:
-                st.success(msg)  # phase 6 step 1: green banner for a clean schedule
+                st.success(msg)  # new code: green banner for a clean schedule
             else:
-                st.warning(f"⚠️ {msg}")  # phase 6 step 1: yellow banner per conflict — clear for pet owner
+                st.warning(f"⚠️ {msg}")  # new code
 
         st.divider()
 
-        # --- phase 6 step 1: Scheduled Tasks Table ---
+        # --- new code: Scheduled Tasks Table ---
         st.markdown("#### Today's Scheduled Tasks")
-        plan = scheduler.generate_plan()  # phase 6 step 1: get ordered task list
+        plan = scheduler.generate_plan()  # new code: get ordered task list
         if plan:
-            plan_data = [  # phase 6 step 1: build table rows from scheduled tasks
+            plan_data = [  # new code: build table rows from scheduled tasks
                 {
                     "Task": task.name,
                     "Category": task.category,
@@ -127,21 +127,21 @@ if st.button("Generate schedule"):  # new code
                 }
                 for task in plan
             ]
-            st.table(plan_data)  # phase 6 step 1: display as clean table
+            st.table(plan_data)  # new code: display as clean table
             total = sum(t.duration_minutes for t in plan)
             budget = st.session_state.owner.get_available_time()
-            st.caption(f"Total time used: {total} / {budget} min")  # phase 6 step 1: time summary
+            st.caption(f"Total time used: {total} / {budget} min")  # new code: time summary
 
         else:
-            st.warning("No tasks could be scheduled. Add tasks or increase available minutes.")  # phase 6 step 1
+            st.warning("No tasks could be scheduled. Add tasks or increase available minutes.")  # new code
 
         st.divider()
 
-        # --- phase 6 step 1: Tasks Sorted by Time of Day ---
+        # --- new code: Tasks Sorted by Time of Day ---
         st.markdown("#### All Tasks by Time of Day")
-        sorted_tasks = scheduler.sort_by_time()  # phase 6 step 1: use sort_by_time() method
+        sorted_tasks = scheduler.sort_by_time()  # new code: use sort_by_time() method
         if sorted_tasks:
-            sorted_data = [  # phase 6 step 1: build table rows sorted by time slot
+            sorted_data = [  # new code: build table rows sorted by time slot
                 {
                     "Task": task.name,
                     "Time Slot": task.time_slot.name.capitalize(),
@@ -151,6 +151,6 @@ if st.button("Generate schedule"):  # new code
                 }
                 for task in sorted_tasks
             ]
-            st.table(sorted_data)  # phase 6 step 1
+            st.table(sorted_data)  # new code
         else:
-            st.info("No tasks to display.")  # phase 6 step 1
+            st.info("No tasks to display.")  # new code
