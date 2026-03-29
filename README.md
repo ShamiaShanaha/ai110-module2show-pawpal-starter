@@ -75,7 +75,7 @@ python -m pytest tests/ -v
 **Recurrence Logic**
 - Verifies a `DAILY` task returns a new task due tomorrow when completed
 - Verifies a `WEEKLY` task returns a new task due in 7 days when completed
-- Verifies an `AS_NEEDED` task returns `None` — no new task created
+- Verifies an `AS_NEEDED` task returns `None` no new task created
 - Verifies `complete_and_reschedule()` adds the next occurrence directly to the pet's task list
 
 **Conflict Detection**
@@ -89,4 +89,4 @@ python -m pytest tests/ -v
 
 ★★★★☆ (4 out of 5)
 
-11 out of 11 tests pass. Core behaviors — task completion, sorting, recurrence, and conflict detection — are all verified. One star withheld because edge cases like an empty owner (no pets), zero available minutes, and duplicate task completion are not yet covered by the test suite.
+11 out of 11 tests pass. Core behaviors such as task completion, sorting, recurrence, and conflict detection are all verified. I said 4 stars because edge cases like an empty owner (no pets), zero available minutes, and duplicate task completion are not yet covered by the test suite.
