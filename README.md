@@ -90,3 +90,7 @@ python -m pytest tests/ -v
 ★★★★☆ (4 out of 5)
 
 11 out of 11 tests pass. Core behaviors such as task completion, sorting, recurrence, and conflict detection are all verified. I said 4 stars because edge cases like an empty owner (no pets), zero available minutes, and duplicate task completion are not yet covered by the test suite.
+
+
+![UML Diagram](uml_final.png)
+
